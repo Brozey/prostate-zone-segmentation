@@ -1,0 +1,18 @@
+{
+    "channel_names": {
+        "0": "T2"
+    },
+    "labels": {
+        "background": 0,
+        "TZ": 1,
+        "PZ": 2
+    },
+    "numTraining": 258,
+    "file_ending": ".nii.gz",
+    "name": "ProstateZones",
+    "description": "Prostate zone segmentation (TZ + PZ) from T2w MRI. Combined Prostate158 + MSD Task05 + BMC datasets.",
+    "reference": "Combined multi-site dataset",
+    "licence": "Research use only",
+    "release": "1.0",
+    "overwrite_image_reader_writer": "SimpleITKIO"
+}
