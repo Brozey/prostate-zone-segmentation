@@ -6,6 +6,11 @@ Fully automatic segmentation of the **Transition Zone (TZ)** and **Peripheral Zo
   <img src="assets/example_prediction.png" width="720" alt="Example segmentation overlay">
 </p>
 
+<p align="center">
+  <img src="assets/case_0001_slices.gif" width="720" alt="Animated slice-by-slice segmentation">
+  <br><em>Animated slice-by-slice view — T2w MRI | Ground Truth | Prediction</em>
+</p>
+
 ---
 
 ## Highlights
