@@ -56,6 +56,15 @@ def overlay_seg(img_slice, seg_slice, alpha=ALPHA):
     return np.clip(rgb, 0, 255).astype(np.uint8)
 
 
+def axial_view(slice_2d):
+    """Orient an axial slice for standard radiological display.
+
+    For RAS-oriented NIfTI data, [:, :, z] gives (R, A) axes.
+    Standard axial view: anterior at top, patient-right on viewer-left.
+    """
+    return np.flipud(slice_2d.T)
+
+
 def mid_slice_idx(seg_vol):
     """Find the axial slice with the largest prostate area."""
     area = np.sum(seg_vol > 0, axis=(0, 1))  # per-slice area (axis 2)
@@ -74,9 +83,9 @@ def make_comparison_png(img_path, gt_path, pred_path, out_path, slice_idx=None):
         slice_idx = mid_slice_idx(gt_vol)
 
     # Extract axial slices and rotate for display
-    img_s = np.rot90(img_vol[:, :, slice_idx])
-    gt_s = np.rot90(gt_vol[:, :, slice_idx])
-    pred_s = np.rot90(pred_vol[:, :, slice_idx])
+    img_s = axial_view(img_vol[:, :, slice_idx])
+    gt_s = axial_view(gt_vol[:, :, slice_idx])
+    pred_s = axial_view(pred_vol[:, :, slice_idx])
 
     # Build 3 panels
     mri_rgb = np.stack([img_s] * 3, axis=-1)
@@ -148,15 +157,15 @@ def make_slice_gif(img_path, pred_path, out_path, fps=4,
 
     frames = []
     for z in range(s_start, s_end):
-        img_s = np.rot90(img_vol[:, :, z])
-        pred_s = np.rot90(pred_vol[:, :, z])
+        img_s = axial_view(img_vol[:, :, z])
+        pred_s = axial_view(pred_vol[:, :, z])
         h, w = img_s.shape[:2]
 
         mri_rgb = np.stack([img_s] * 3, axis=-1)
         pred_ov = overlay_seg(img_s, pred_s)
 
         if gt_vol is not None:
-            gt_s = np.rot90(gt_vol[:, :, z])
+            gt_s = axial_view(gt_vol[:, :, z])
             gt_ov = overlay_seg(img_s, gt_s)
             gap = 4
             canvas = np.zeros((h + 30, w * 3 + gap * 2, 3), dtype=np.uint8)
@@ -260,9 +269,9 @@ def main():
         pred_vol = load_nifti(pred_f).astype(int)
         z = mid_slice_idx(gt_vol)
 
-        img_s = np.rot90(img_vol[:, :, z])
-        gt_s = np.rot90(gt_vol[:, :, z])
-        pred_s = np.rot90(pred_vol[:, :, z])
+        img_s = axial_view(img_vol[:, :, z])
+        gt_s = axial_view(gt_vol[:, :, z])
+        pred_s = axial_view(pred_vol[:, :, z])
 
         mri_rgb = np.stack([img_s] * 3, axis=-1)
         gt_ov = overlay_seg(img_s, gt_s)
