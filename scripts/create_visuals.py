@@ -60,9 +60,9 @@ def axial_view(slice_2d):
     """Orient an axial slice for standard radiological display.
 
     For RAS-oriented NIfTI data, [:, :, z] gives (R, A) axes.
-    Applies 180° rotation to match standard DICOM viewer orientation.
+    No rotation needed — raw array orientation matches standard axial view.
     """
-    return np.rot90(slice_2d, k=2)
+    return slice_2d
 
 
 def mid_slice_idx(seg_vol):
